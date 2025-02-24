@@ -46,3 +46,7 @@ Delete a URL Alais
 // I ended up creating small optimization for the database// ensuring that postgres tracks incremting ids
 /// Also I debated around what to do with collisions of URL hashes// but realizied that most optimal to do within the time-constraints// was just to do a keep a list of in-memory aliases and just do just a check on these
 // Additionally I also conisdreed having a function to deal with expiring aliases/ e.g A user selects an Alias with an expiring 30 seconds/ 50 seconds/ I think that could have implemented on the DB side with some triggers
+
+/// I also in the first thought of this , i explored transactions // basically you can use avoid situations in calling concurrent code
+// My scenario was that protecting agaisnst the insert statement having the same writes (when doing concurrenlty)
+// I think that's slightly wider changes to the init.sql file
