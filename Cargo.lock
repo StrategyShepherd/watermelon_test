@@ -346,9 +346,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.3"
+version = "1.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27f657647bcff5394bf56c7317665bbf790a137a50eaaa5c6bfbb9e27a518f2d"
+checksum = "c736e259eea577f443d5c86c304f9f4ae0295c43f3ba05c21f1d66b5f06001af"
 dependencies = [
  "jobserver",
  "libc",
@@ -1280,6 +1280,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
+name = "ring"
+version = "0.17.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da5349ae27d3887ca812fb375b45a4fbb36d8d12d2df394968cd86e35683fe73"
+dependencies = [
+ "cc",
+ "cfg-if",
+ "getrandom",
+ "libc",
+ "untrusted",
+ "windows-sys",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1724,6 +1738,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e70f2a8b45122e719eb623c01822704c4e0907e7e426a05927e1a1cfff5b75d0"
 
 [[package]]
+name = "untrusted"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
+
+[[package]]
 name = "url"
 version = "2.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1732,6 +1752,16 @@ dependencies = [
  "form_urlencoded",
  "idna",
  "percent-encoding",
+]
+
+[[package]]
+name = "url-hash"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "928f795723c686ca4c1708cb9d836ebbb4676329fd8d3f15ae140ec7482cee00"
+dependencies = [
+ "ring",
+ "url",
 ]
 
 [[package]]
@@ -1752,6 +1782,7 @@ dependencies = [
  "tracing-actix-web",
  "tracing-log",
  "tracing-subscriber",
+ "url-hash",
 ]
 
 [[package]]

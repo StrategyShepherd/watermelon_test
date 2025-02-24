@@ -4,6 +4,9 @@ Ideally a URL shortner  should be able to do two thigns
 Ideally we should probarly look at limiting the size of the request that goes inside of the API
 Ideally we can do this server-side
 Create a URl Alais
+
+// need to also perform URL validation as well that is valid
+
 /// Ideally we could implement this in-memory, but ideally we extend the creation of database to having a new table /// with some sort  of hashfed value
 // at this stage we don't need to deal with hash collisions at the meoment
 /// but we can introduce behaviour such as
@@ -11,7 +14,7 @@ Create a URl Alais
 /// we'd also need a library / fucntion to generate short url, at the moment we can do a simple hash fucntion to retridve
 /// once created we'd need to mark this in a whitelist of sorts(can filter this out, in the event of hash colission
 /// Response structue (ideally a response strucutre should be inline with returning a 200 okay/ created or 201
-
+// ideally we could give an option for a custom-named Url shortcode that might be worth considering adding within the api calsl
 
 Delete a URL Alais
 /// this should be a db call basically// check if not in use by any other resoruce

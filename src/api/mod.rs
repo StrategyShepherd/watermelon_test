@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use actix_web::dev::Server;
 use actix_web::middleware::{Compress, Logger, NormalizePath};
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web, delete};
 
 use crate::state::State;
 
@@ -15,9 +15,16 @@ async fn not_found_handler(_request: HttpRequest) -> HttpResponse {
     HttpResponse::NotFound().json(serde_json::json!({ "error": "Not found" }))
 }
 
-#[get("/")]
-async fn createUrl() -> HttpResponse {
-
+#[delete("/urls/{aliasId}")]
+async fn delete_url(path : web::Path<(String)>) -> HttpResponse {
+    let alias = path.into_inner();
+    // call to DB 
+    /// check alias id///
+    /// start transaction///
+    /// 
+}
+async fn create_url() -> HttpResponse {
+    
 }
 pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
     let state = web::Data::new(state);
@@ -32,6 +39,7 @@ pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
             .default_service(web::route().to(not_found_handler))
     };
     let server = HttpServer::new(create_app)
+        
         .keep_alive(Duration::from_secs(60))
         .listen(listener)?
         .run();

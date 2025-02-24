@@ -1,5 +1,15 @@
 
+#[derive(Serialize)]
 struct CreateUrlResponse{
-    url: String,
-    
+    short_alias: String,
+}
+
+#[derive(Serialize)]
+struct DeleteUrlResponse{
+    message: String,
+}
+
+#[derive(Serialize)]
+struct InvalidUrlResponse{
+    message: String,
 }
