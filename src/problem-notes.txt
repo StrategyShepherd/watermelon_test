@@ -26,3 +26,10 @@ Delete a URL Alais
 
 /// Redirect al lrequests to an alias to the full URL should happen at the api-level scope
 /// Ideally we can return a 302 or a 301 as respone
+
+// Slight pause in dev 3:46
+/// need to think optimal database design a little bit more ideally at the moment
+// we have create url/delete URL wihtout redirection and proper response handling// ideally if we current the setup
+// where (url,alias) -> stored
+// esentilaly we can make a small optimization we store all generated aliases in memory and then we can filter out and have some retry logic
+

@@ -1,4 +1,6 @@
 use url::{Url};
+use url_hash::UrlHash;
+
 pub struct Utility {}
 
 impl Utility {
@@ -13,8 +15,8 @@ impl Utility {
         true
     }
     pub fn generate_alias(url : String) -> String {
-     let hashed_url = UrlHash::from(url);
-     hashed_url.to_string();
+     let hashed_url = UrlHash::from(Url::from(url.parse().unwrap()));
+     hashed_url.to_string()
     }
 
 }

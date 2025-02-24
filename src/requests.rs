@@ -1,3 +1,6 @@
+use serde::Serialize;
+
+#[derive(Serialize)]
 pub struct CreateUrlRequest {
     url: String,
     expiration_time: u32,
