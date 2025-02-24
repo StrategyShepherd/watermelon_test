@@ -1782,6 +1782,7 @@ dependencies = [
  "tracing-actix-web",
  "tracing-log",
  "tracing-subscriber",
+ "url",
  "url-hash",
 ]
 

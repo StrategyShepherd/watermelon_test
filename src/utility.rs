@@ -1,14 +1,18 @@
-
-
-
-struct Utility {}
+use url::{Url};
+pub struct Utility {}
 
 impl Utility {
-
-    fn is_valid_url(url: &str) -> bool {
-
+    pub fn new() -> Self {
+        Utility {}
     }
-    fn generate_alias(url : String) -> String {
+    pub fn is_valid_url(url: &str) -> bool {
+        let url = Url::parse(url);
+        if url.is_err() {
+            return false;
+        }
+        true
+    }
+    pub fn generate_alias(url : String) -> String {
      let hashed_url = UrlHash::from(url);
      hashed_url.to_string();
     }

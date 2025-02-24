@@ -2,15 +2,15 @@ use deadpool_postgres::GenericClient;
 use tokio_postgres::types::Type;
 
 #[tracing::instrument(skip(client))]
-pub async fn create_link<C>(client: &C, id: &str, url: &str) -> Result<(), tokio_postgres::Error>
+pub async fn create_link<C>(client: &C, url: &str) -> Result<(), tokio_postgres::Error>
 where
     C: GenericClient,
 {
-    const SQL: &str = "INSERT INTO link (id, url) VALUES ($1, $2)";
+    const SQL: &str = "INSERT INTO link (url) VALUES ($1, $2)";
     const TYPES: &[Type] = &[Type::TEXT, Type::TEXT];
 
     let stmt = client.prepare_typed(SQL, TYPES).await?;
-    client.execute(&stmt, &[&id, &url]).await?;
+    client.execute(&stmt, &[&url]).await?;
     Ok(())
 }
 
