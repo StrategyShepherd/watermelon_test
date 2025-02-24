@@ -15,6 +15,10 @@ async fn not_found_handler(_request: HttpRequest) -> HttpResponse {
     HttpResponse::NotFound().json(serde_json::json!({ "error": "Not found" }))
 }
 
+#[get("/")]
+async fn createUrl() -> HttpResponse {
+    
+}
 pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
     let state = web::Data::new(state);
     let create_app = move || {

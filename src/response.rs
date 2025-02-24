@@ -1,0 +1,5 @@
+
+struct CreateUrlResponse{
+    url: String,
+    
+}
