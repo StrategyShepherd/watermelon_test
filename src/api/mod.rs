@@ -17,7 +17,7 @@ async fn not_found_handler(_request: HttpRequest) -> HttpResponse {
 
 #[get("/")]
 async fn createUrl() -> HttpResponse {
-    
+
 }
 pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
     let state = web::Data::new(state);
