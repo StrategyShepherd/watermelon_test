@@ -14,17 +14,17 @@ async fn not_found_handler(_request: HttpRequest) -> HttpResponse {
     HttpResponse::NotFound().json(json!({ "error": "Not found" }))
 }
 
-async fn create_url(req: HttpRequest, app_state : web::Data<State>, path : web::Path<(String)>) -> HttpResponse {
+async fn create_url(req: HttpRequest, app_state : web::Data<State>, path : web::Path<String>) -> HttpResponse {
     let client = app_state.get_ref().clone().database_client().await.unwrap();
-    let (url) = path.into_inner();
-    if (Utility::is_valid_url(&*url) && Utility::is_over_accepted_url_length(&*url)) {
+    let url = path.into_inner();
+    if Utility::is_valid_url(&*url) && Utility::is_over_accepted_url_length(&*url) {
         return HttpResponse::BadRequest().json(json!({ "error": "Invalid URL" }))
     }
-    if (Utility::is_over_accepted_url_length(&*url)) {
+    if Utility::is_over_accepted_url_length(&*url) {
         return HttpResponse::BadRequest().json(json!({ "error": "URL over accepted length" }))
     }
     let mut generated_alias = Utility::generate_alias(url.parse().unwrap());
-    while (!app_state.find_alias(&generated_alias)) {
+    while !app_state.find_alias(&generated_alias) {
         generated_alias = Utility::generate_alias(url.parse().unwrap());
     }
     let mut request = CreateUrlRequest::new(&generated_alias, 0);
