@@ -49,7 +49,7 @@ async fn delete_url(path : web::Path<String>, state :web::Data<State>) -> HttpRe
 }
 fn api_config(_cfg: &mut web::ServiceConfig) {
         _cfg.service(delete_url)
-            .route("/{url}", web::post().to(create_url))
+            .route("urls/createUrl/{url}", web::post().to(create_url))
             .service(delete_url);
     }
 
