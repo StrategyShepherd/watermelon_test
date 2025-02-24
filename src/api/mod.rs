@@ -10,48 +10,50 @@ use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::{delete, web, App, HttpRequest, HttpResponse, HttpServer};
 use serde_json::json;
 
-fn api_config(_cfg: &mut web::ServiceConfig) {
-    todo!()
-}
-
 async fn not_found_handler(_request: HttpRequest) -> HttpResponse {
-    HttpResponse::NotFound().json(serde_json::json!({ "error": "Not found" }))
+    HttpResponse::NotFound().json(json!({ "error": "Not found" }))
 }
 
-
-
-async fn create_url(app_state : web::Data<State>, path : web::Path<(String)>, query_params : web::Query<CreateUrlRequest>) -> HttpResponse {
+async fn create_url(req: HttpRequest, app_state : web::Data<State>, path : web::Path<(String)>) -> HttpResponse {
     let client = app_state.get_ref().clone().database_client().await.unwrap();
     let (url) = path.into_inner();
     if (Utility::is_valid_url(&*url) && Utility::is_over_accepted_url_length(&*url)) {
-        return HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid URL" }))
+        return HttpResponse::BadRequest().json(json!({ "error": "Invalid URL" }))
     }
-    if(Utility::is_over_accepted_url_length(&*url)) {
-      return HttpResponse::BadRequest().json(serde_json::json!({ "error": "URL over accepted length" }))
+    if (Utility::is_over_accepted_url_length(&*url)) {
+        return HttpResponse::BadRequest().json(json!({ "error": "URL over accepted length" }))
     }
-
     let mut generated_alias = Utility::generate_alias(url.parse().unwrap());
-    while(!app_state.find_alias(&generated_alias)) {
+    while (!app_state.find_alias(&generated_alias)) {
         generated_alias = Utility::generate_alias(url.parse().unwrap());
     }
     let mut request = CreateUrlRequest::new(&generated_alias, 0);
-    request.set_custom_alias(Some((&generated_alias).to_string()));
+    let generated_result = [req.full_url().domain().unwrap().to_string(), String::from('/'), generated_alias].join("");
+    request.set_custom_alias(Some((&generated_result).to_string()));
     match create_link(&client, &*url).await {
-    Ok(generated_alias) => HttpResponse::TemporaryRedirect().json(json!({ "link": generated_alias })),
-    Err(e) => {
-        HttpResponse::InternalServerError().json(json!({ "error": "Internal server error", "details": e.to_string() }))
+        Ok(generated_alias) => HttpResponse::TemporaryRedirect().json(json!({ "link": generated_result })),
+        Err(e) => {
+            HttpResponse::InternalServerError().json(json!({ "error": "Internal server error", "details": e.to_string() }))
+        }
     }
 }
-#[delete("/urls/{aliasId}/")]
+
+#[delete("/urls/{aliasId}")]
 async fn delete_url(path : web::Path<String>, state :web::Data<State>) -> HttpResponse {
     let client = state.get_ref().clone().database_client().await.unwrap();
     let alias_id = path.into_inner();
     match delete_link(&client, &*alias_id).await {
     Ok(_) => HttpResponse::NoContent().finish(),
     Err(e) => HttpResponse::NotFound().json(serde_json::json!({ "error": "Not found" }))}
-    
+
 }
-pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
+fn api_config(_cfg: &mut web::ServiceConfig) {
+        _cfg.service(delete_url)
+            .route("/{url}", web::post().to(create_url))
+            .service(delete_url);
+    }
+
+    pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
     let state = web::Data::new(state);
     let create_app = move || {
         let app = App::new().app_data(state.clone());
@@ -62,8 +64,7 @@ pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
             .wrap(NormalizePath::trim())
             .service(web::scope("/api")
                  .configure(api_config))
-            .route("/{url}/{expirationTime}", web::post().to(create_url))
-            .service(delete_url)
+          
             .default_service(web::route().to(not_found_handler))
     };
     let server = HttpServer::new(create_app)
@@ -72,3 +73,5 @@ pub fn listen(listener: TcpListener, state: State) -> std::io::Result<Server> {
         .run();
     Ok(server)
 }
+    
+    
