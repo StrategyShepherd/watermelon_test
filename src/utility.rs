@@ -1,6 +1,7 @@
 use url::{Url};
 use url_hash::UrlHash;
 
+const URL_LENGTH: i32 = 200;
 pub struct Utility {}
 
 impl Utility {
@@ -14,6 +15,14 @@ impl Utility {
         }
         true
     }
+    pub fn is_over_accepted_url_length(url : &str) -> bool {
+        let url = Url::parse(url);
+        if url.unwrap().as_str().len() as i32 > URL_LENGTH {
+            return true;
+        }
+        false
+    }
+    
     pub fn generate_alias(url : String) -> String {
      let hashed_url = UrlHash::from(Url::from(url.parse().unwrap()));
      hashed_url.to_string()
