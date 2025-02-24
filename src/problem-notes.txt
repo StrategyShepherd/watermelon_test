@@ -33,3 +33,16 @@ Delete a URL Alais
 // where (url,alias) -> stored
 // esentilaly we can make a small optimization we store all generated aliases in memory and then we can filter out and have some retry logic
 
+
+
+/// Narrative Docs ///
+
+1. I realized that I should have implement the middleware of redirection (I realized that mistake as I finished the exercise, but ideally it could have gone within the actix api main bit
+/// My Logic  would have been to check whether the alias is already in the DB// and produce a redirection response with 304 (as application/json)
+// Ideally could be extended with rate limiting
+/// Ideally I aimed to seperate the two calls
+/// one for create URL with an Alias
+// one for delete URL with an Alias
+// I ended up creating small optimization for the database// ensuring that postgres tracks incremting ids
+/// Also I debated around what to do with collisions of URL hashes// but realizied that most optimal to do within the time-constraints// was just to do a keep a list of in-memory aliases and just do just a check on these
+// Additionally I also conisdreed having a function to deal with expiring aliases/ e.g A user selects an Alias with an expiring 30 seconds/ 50 seconds/ I think that could have implemented on the DB side with some triggers

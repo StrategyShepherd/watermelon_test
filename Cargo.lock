@@ -1773,6 +1773,7 @@ dependencies = [
  "deadpool",
  "deadpool-postgres",
  "dotenv",
+ "futures-util",
  "serde",
  "serde_json",
  "time",
